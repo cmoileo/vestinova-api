@@ -8,10 +8,12 @@ import {UpdateItemUseCase} from "../../domain/use-case/update-item.use-case";
 import CategoryEntity from "../../infrastructure/entity/Category.entity";
 import {GetCategoriesUseCase} from "../../domain/use-case/get-categories.use-case";
 import {SearchItemsUseCase} from "../../domain/use-case/search-items.use-case";
+import {Http2ServerResponse} from "node:http2";
+import {ServerResponse} from "node:http";
 
 export class ItemController {
     private readonly itemRepository: ItemRepository;
-    constructor(itemRepository) {
+    constructor(itemRepository: ItemRepository) {
         this.itemRepository = itemRepository;
         this.createItem = this.createItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
@@ -21,16 +23,17 @@ export class ItemController {
         this.getCategories = this.getCategories.bind(this);
         this.searchItems = this.searchItems.bind(this);
     }
-    public async createItem(req, res): Promise<ItemEntity[] | Error> {
+    public async createItem(req: Request, res: any): Promise<ItemEntity | Error> {
         const item = req.body;
+        //@ts-ignore
         const images = req.files;
+        //@ts-ignore
         const userId = req.user.id;
         try {
-            const createdItem = await new CreateItemUseCase(this.itemRepository).execute(item, userId, images);
+            const createdItem: Promise<ItemEntity | Error>  = await new CreateItemUseCase(this.itemRepository).execute(item, userId, images);
             console.log(createdItem)
             res.status(201).json(createdItem);
-        } catch (error) {
-            console.log(error)
+        } catch (error: Error) {
             res.status(400).json({ error: error.message });
         }
     }

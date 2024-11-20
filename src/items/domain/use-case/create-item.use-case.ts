@@ -1,15 +1,16 @@
 import {ItemModel} from "../model/item.model";
 import ItemEntity from "../../infrastructure/entity/Item.entity";
 import {ImageStorageService} from "../../../shared/service/imageStorage.service";
+import {IItemRepository} from "../../infrastructure/repository/IItemRepository";
 
 export class CreateItemUseCase {
     private readonly itemRepository;
     private readonly imageStorageService: ImageStorageService;
-    constructor(itemRepository) {
+    constructor(itemRepository: IItemRepository) {
         this.itemRepository = itemRepository;
         this.imageStorageService = new ImageStorageService();
     }
-    public async execute(item: ItemModel, userId: string, images: File[]): Promise<ItemEntity[] | Error> {
+    public async execute(item: ItemModel, userId: string, images: File[]): Promise<ItemEntity | Error> {
         try {
             const newItem = new ItemModel()
              if (typeof item === "string") item = JSON.parse(item);
@@ -38,7 +39,7 @@ export class CreateItemUseCase {
             }
             return await this.itemRepository.createItem(newItem);
         } catch (error) {
-            return new Error(error);
+            throw error;
         }
     }
 }
