@@ -7,6 +7,7 @@ class UserEntity extends Model {
     public lastname!: string;
     public email!: string;
     public password!: string;
+    public avatar?: string;
 }
 
 UserEntity.init(
@@ -33,7 +34,11 @@ UserEntity.init(
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-        }
+        },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     },
     {
         sequelize,

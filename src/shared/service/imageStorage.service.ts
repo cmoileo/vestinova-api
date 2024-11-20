@@ -1,5 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import {uuid} from "uuidv4";
+import {extname} from "path";
 
 export class ImageStorageService {
     private supabase: SupabaseClient;

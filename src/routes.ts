@@ -14,6 +14,7 @@ const authController = new AuthController(userRepository);
 
 router.post("/api/auth/register", authController.registerHandler);
 router.post("/api/auth/login", authController.loginHandler);
+router.put("/api/auth/update/:id", upload.single('avatar'), authController.updateHandler);
 
 const itemRepository = new ItemRepository();
 const itemController = new ItemController(itemRepository);
@@ -25,5 +26,7 @@ router.get("/api/items", authGuard, itemController.getItems);
 router.put("/api/items/:id", authGuard, itemController.updateItem);
 router.get("/api/items-categories", itemController.getCategories);
 router.get("/api/items-search", itemController.searchItems);
+router.post("/api/items/:itemId/like", authGuard, itemController.likeItemHandler);
+router.get("/api/items/:itemId/likes", itemController.getLikesHandler);
 
 export default router;
