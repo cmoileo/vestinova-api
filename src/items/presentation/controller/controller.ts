@@ -10,6 +10,7 @@ import {GetCategoriesUseCase} from "../../domain/use-case/get-categories.use-cas
 import {SearchItemsUseCase} from "../../domain/use-case/search-items.use-case";
 import {Http2ServerResponse} from "node:http2";
 import {ServerResponse} from "node:http";
+import {ItemModel} from "../../domain/model/item.model";
 
 export class ItemController {
     private readonly itemRepository: ItemRepository;
@@ -23,83 +24,88 @@ export class ItemController {
         this.getCategories = this.getCategories.bind(this);
         this.searchItems = this.searchItems.bind(this);
     }
-    public async createItem(req: Request, res: any): Promise<ItemEntity | Error> {
-        const item = req.body;
+    public async createItem(req: Request, res: any): Promise<void> {
+        const item: any = req.body;
         //@ts-ignore
         const images = req.files;
         //@ts-ignore
         const userId = req.user.id;
         try {
-            const createdItem: Promise<ItemEntity | Error>  = await new CreateItemUseCase(this.itemRepository).execute(item, userId, images);
+            const createdItem: ItemEntity | Error  = await new CreateItemUseCase(this.itemRepository).execute(item, userId, images);
             console.log(createdItem)
             res.status(201).json(createdItem);
-        } catch (error: Error) {
+        } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
     }
 
-    public async deleteItem(req, res): Promise<ItemEntity[] | Error> {
+    public async deleteItem(req: Request, res: any): Promise<void> {
+        //@ts-ignore
         const itemId = req.params.id;
+        //@ts-ignore
         const userId = req.user.id;
         try {
             await new DeleteItemUseCase(this.itemRepository).deleteItem(userId, itemId);
             res.status(204).send();
-        } catch (error) {
+        } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
     }
 
-    public async findItemById(req, res): Promise<ItemEntity | Error> {
+    public async findItemById(req: Request, res: any): Promise<void> {
+        //@ts-ignore
         const itemId = req.params.id;
         try {
             const item = await new FindItemByIdUseCase(this.itemRepository).findItemById(itemId);
             if (!item) return res.status(404).json({ error: 'Item not found' });
             res.status(200).json(item);
-        } catch (error) {
+        } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
     }
 
-    public async getItems(req, res): Promise<ItemEntity[] | Error> {
+    public async getItems(req: Request, res: any): Promise<void> {
+        //@ts-ignore
         const pagination = req.query.pagination;
         if (!pagination) return res.status(400).json({ error: 'Pagination is required' });
         try {
             const items = await new GetItemsUseCase(this.itemRepository).getItems(pagination);
             res.status(200).json(items);
-        } catch (error) {
+        } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
     }
 
-    public async updateItem(req, res): Promise<ItemEntity | Error> {
+    public async updateItem(req: Request, res: any): Promise<void> {
+        //@ts-ignore
         const itemId = req.params.id;
-        const item = req.body;
+        const item: any = req.body;
         try {
             const updatedItem = await new UpdateItemUseCase(this.itemRepository).updateItem(itemId, item);
             if (!updatedItem) return res.status(404).json({ error: 'Item not found' });
             res.status(200).json(updatedItem);
-        } catch (error) {
+        } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
     }
 
-    public async getCategories(req, res): Promise<CategoryEntity[] | Error> {
+    public async getCategories(req: Request, res: any): Promise<CategoryEntity[] | Error> {
         try {
             const categories = await new GetCategoriesUseCase(this.itemRepository).getCategories();
             return res.status(200).json(categories);
         } catch (error) {
-            console.error('Error getting categories:', error);
             return res.status(500).json({ error: 'An error occurred while fetching categories' });
         }
     }
 
-    public async searchItems(req, res): Promise<ItemEntity[] | Error> {
+    public async searchItems(req: Request, res: any): Promise<void> {
+        //@ts-ignore
         const query = req._parsedUrl.search;
         if (!query) return res.status(400).json({ error: 'Query is required' });
         try {
             const items = await new SearchItemsUseCase(this.itemRepository).searchItems(query);
             res.status(200).json(items);
-        } catch (error) {
+        } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
     }

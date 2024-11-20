@@ -1,8 +1,8 @@
 export class UserModel {
-    public firstname: string;
-    public lastname: string;
-    public email: string;
-    public password: string;
+    public firstname: string | undefined;
+    public lastname: string | undefined;
+    public email: string | undefined;
+    public password: string | undefined;
 
     public setPassword(password: string): void | Error {
         if (password.length < 8) {

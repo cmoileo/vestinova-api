@@ -34,12 +34,15 @@ export class CreateUserUseCase {
         }
         newUser = Object.assign({}, newUser);
         try {
+            if (!newUser.password) {
+                throw new Error('Password is not defined');
+            }
             newUser.password = await hashPasswordService.hashPassword(newUser.password);
             const createdUser = await this.userRepository.createUser(newUser);
             return {
                 token: await jwtService.generateToken({ id: createdUser.id }, '30d')
             }
-        } catch (error) {
+        } catch (error: any) {
             return error;
         }
     }

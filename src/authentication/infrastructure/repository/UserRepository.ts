@@ -3,7 +3,11 @@ import UserEntity from '../../infrastructure/entity/User.entity';
 
 export class UserRepository implements IUserRepository {
     async getUserById(id: string): Promise<UserEntity> {
-        return UserEntity.findByPk(id);
+        const user = await UserEntity.findByPk(id);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user;
     }
 
     async getUsers(): Promise<UserEntity[]> {
@@ -15,6 +19,10 @@ export class UserRepository implements IUserRepository {
     }
 
     async getUserByEmail(email: string): Promise<UserEntity> {
-        return UserEntity.findOne({ where: { email } });
+        const user = await UserEntity.findOne({ where: { email } });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user;
     }
 }

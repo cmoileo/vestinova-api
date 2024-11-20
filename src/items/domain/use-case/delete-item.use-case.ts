@@ -3,10 +3,10 @@ import {ItemRepository} from "../../infrastructure/repository/ItemRepository";
 
 export class DeleteItemUseCase {
     private readonly itemRepository: ItemRepository;
-    constructor(itemRepository) {
+    constructor(itemRepository: ItemRepository) {
         this.itemRepository = itemRepository;
     }
-    async deleteItem(userId, itemId): Promise<void | Error> {
+    async deleteItem(userId: string, itemId: string): Promise<void | Error> {
         try {
             const item = await this.itemRepository.findItemById(itemId);
             if (!item) return new Error("Item not found");

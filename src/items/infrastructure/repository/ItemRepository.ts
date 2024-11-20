@@ -13,19 +13,16 @@ export class ItemRepository implements IItemRepository {
                     id: item.categoryIds
                 }
             });
-           for (const category of categories) {
-               await newItem.addCategoryEntity(category)
-           }
         }
         return newItem;
     }
-    async deleteItem(id): Promise<void> {
+    async deleteItem(id: string): Promise<void> {
         await ItemEntity.destroy({where: {id}});
     }
-    async findItemById(id): Promise<ItemEntity | null> {
+    async findItemById(id: string): Promise<ItemEntity | null> {
         return await ItemEntity.findByPk(id);
     }
-    async findAllItems(pagination): Promise<ItemEntity[]> {
+    async findAllItems(pagination: any): Promise<ItemEntity[]> {
         return await ItemEntity.findAll(
             {
                 limit: pagination,
@@ -109,6 +106,7 @@ export class ItemRepository implements IItemRepository {
             group: ['ItemEntity.id'],
             limit: count,
         });
+        // @ts-ignore
         return items.filter(item => item.CategoryEntities.length === categoryWhereClause.length);
     }
 }

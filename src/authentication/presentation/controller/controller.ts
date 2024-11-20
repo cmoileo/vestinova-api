@@ -21,7 +21,7 @@ export class AuthController {
     try {
       const createdUser = await new CreateUserUseCase(this.userRepository).execute(body);
       res.status(201).json(createdUser);
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   }
@@ -32,7 +32,7 @@ export class AuthController {
     try {
       const loggegUser = await new LoginUserUseCase(this.userRepository).execute(body);
       res.status(201).json(loggegUser);
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   }

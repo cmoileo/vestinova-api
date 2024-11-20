@@ -2,11 +2,12 @@ import {ItemModel} from "../model/item.model";
 import ItemEntity from "../../infrastructure/entity/Item.entity";
 import {ImageStorageService} from "../../../shared/service/imageStorage.service";
 import {IItemRepository} from "../../infrastructure/repository/IItemRepository";
+import {ItemRepository} from "../../infrastructure/repository/ItemRepository";
 
 export class CreateItemUseCase {
-    private readonly itemRepository;
+    private readonly itemRepository: ItemRepository;
     private readonly imageStorageService: ImageStorageService;
-    constructor(itemRepository: IItemRepository) {
+    constructor(itemRepository: ItemRepository) {
         this.itemRepository = itemRepository;
         this.imageStorageService = new ImageStorageService();
     }
@@ -20,7 +21,12 @@ export class CreateItemUseCase {
                 imageIds = await Promise.all(images.map(image => this.imageStorageService.uploadImage(image)));
                 newItem.setImagesIds(imageIds);
             }
-            newItem.setCategoryIds(item.categoryIds);
+            if (item.categoryIds) {
+                newItem.setCategoryIds(item.categoryIds);
+            }
+            if (!item.name || !item.description || !item.price) {
+                return new Error("Missing required fields");
+            }
             const nameError = newItem.setName(item.name);
             if (nameError instanceof Error) {
                 return nameError;

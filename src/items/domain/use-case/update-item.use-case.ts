@@ -1,15 +1,19 @@
 import ItemEntity from "../../infrastructure/entity/Item.entity";
+import {ItemModel} from "../model/item.model";
+import {ItemRepository} from "../../infrastructure/repository/ItemRepository";
 
 export class UpdateItemUseCase {
     private readonly itemRepository;
-    constructor(itemRepository) {
+    constructor(itemRepository: ItemRepository) {
         this.itemRepository = itemRepository;
     }
-    public async updateItem(id, item): Promise<ItemEntity | Error> {
+    public async updateItem(id: string, item: ItemEntity): Promise<ItemEntity | Error> {
         try {
-            return await this.itemRepository.updateItem(id, item);
+            const updatedItem = await this.itemRepository.updateItem(id, item)
+            if (!updatedItem) return new Error("Item not found");
+            return updatedItem
         }
-        catch (error) {
+        catch (error: any) {
             return new Error(error.message);
         }
     }

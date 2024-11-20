@@ -1,11 +1,14 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import {uuid} from "uuidv4";
-import {extname} from "path";
+
 export class ImageStorageService {
     private supabase: SupabaseClient;
     private static bucketName = 'images';
 
     constructor() {
+        if (!process.env.SUPABASE_URL || !process.env.SUPABASE_API_KEY) {
+            throw new Error('Supabase credentials not found');
+        }
         this.supabase = createClient(
             process.env.SUPABASE_URL,
             process.env.SUPABASE_API_KEY,
@@ -26,6 +29,7 @@ export class ImageStorageService {
 
     public async getImageUrl(id: string, fileName: string): Promise<string> {
         const path = `${id}/${fileName}`;
+        // @ts-ignore
         const { publicURL, error } = this.supabase.storage.from(ImageStorageService.bucketName).getPublicUrl(path);
         if (error) {
             throw error;

@@ -1,10 +1,10 @@
 export class ItemModel {
-    public name: string;
-    public description: string;
-    public price: number;
-    public userId: string;
-    public imageIds: string[];
-    public categoryIds: string[];
+    public name: string | undefined;
+    public description: string | undefined;
+    public price: number | undefined;
+    public userId: string | undefined;
+    public imageIds: string[] | undefined;
+    public categoryIds: string[] | undefined;
 
     public setName(name: string): void | Error {
         if (name.length < 2) {
