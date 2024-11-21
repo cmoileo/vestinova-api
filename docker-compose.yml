@@ -27,6 +27,5 @@ services:
     volumes:
       - .:/usr/src/app
     command: npm run dev
-
 volumes:
   db_data:
