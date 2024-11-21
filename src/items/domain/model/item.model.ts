@@ -5,6 +5,7 @@ export class ItemModel {
     public userId: string | undefined;
     public imageIds: string[] | undefined;
     public categoryIds: string[] | undefined;
+    public imagesUrls: string[] | undefined;
 
     public setName(name: string): void | Error {
         if (name.length < 2) {

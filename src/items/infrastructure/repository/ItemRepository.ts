@@ -6,15 +6,24 @@ import sequelize from "../../../../sequelize.config";
 
 export class ItemRepository implements IItemRepository {
     async createItem(item: any): Promise<ItemEntity> {
-        const newItem = await ItemEntity.create(item);
-        if (item.categoryIds && item.categoryIds.length > 0) {
+        const createdItem = await ItemEntity.create(item)
+        const categoryIds = item.categoryIds;
+        if (categoryIds && categoryIds.length > 0) {
             const categories = await CategoryEntity.findAll({
                 where: {
-                    id: item.categoryIds
+                    id: {
+                        [Op.in]: categoryIds
+                    }
                 }
             });
+            try {
+                await createdItem.addCategories(categories);
+            } catch (e) {
+                console.log(e)
+                throw e;
+            }
         }
-        return newItem;
+        return createdItem
     }
     async deleteItem(id: string): Promise<void> {
         await ItemEntity.destroy({where: {id}});
@@ -28,7 +37,6 @@ export class ItemRepository implements IItemRepository {
                 limit: pagination,
                 include: {
                     model: CategoryEntity,
-                    attributes: ['isParent', 'name', "parentId"]
                 }
             }
         );

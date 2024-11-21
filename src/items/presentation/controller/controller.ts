@@ -34,14 +34,13 @@ export class ItemController {
     }
     public async createItem(req: Request, res: any): Promise<void> {
         const item: any = req.body;
-        console.log("Corps de la requête : ", req.body);
         //@ts-ignore
-        const images = req.files;
+        const images = item.images.map(base64 => Buffer.from(base64, 'base64'));
+        console.log(images);
         //@ts-ignore
         const userId = req.user.id;
         try {
             const createdItem: ItemEntity | Error  = await new CreateItemUseCase(this.itemRepository).execute(item, userId, images);
-            console.log(createdItem)
             res.status(201).json(createdItem);
         } catch (error: any) {
             res.status(400).json({ error: error.message });

@@ -18,14 +18,15 @@ export class ImageStorageService {
 
     public async uploadImage(file: any): Promise<string> {
         const id = uuid();
-        const path = `./${file.originalname + id}`;
+        console.log("file : ", file)
         const { data, error } = await this.supabase.storage
             .from(ImageStorageService.bucketName)
-            .upload(path, file.buffer);
+            .upload(id, file.buffer);
         if (error) {
+            console.log(error);
             throw error;
         }
-        return data.fullPath;
+        return data.id;
     }
 
     public async getImageUrl(id: string, fileName: string): Promise<string> {

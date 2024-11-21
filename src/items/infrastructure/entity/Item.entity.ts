@@ -10,6 +10,8 @@ class ItemEntity extends Model {
     public userId!: string;
     public imageIds!: string[];
     public categoryIds!: number[];
+
+    public setCategories!: (categories: CategoryEntity[]) => Promise<void>;
 }
 
 ItemEntity.init(

@@ -7,7 +7,6 @@ type CreateItemDto = {
 }
 
 export function isCreateItemDto(object: any): object is CreateItemDto {
-    console.log("object", object)
     return 'name' in object &&
         typeof object.name === 'string' &&
         'description' in object &&
