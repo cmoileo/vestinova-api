@@ -8,7 +8,13 @@ export class GetCategoriesUseCase {
     }
     async getCategories(): Promise<CategoryEntity[] | Error> {
         try {
-            return await this.itemRepository.getCategories();
+            const categories = await this.itemRepository.getCategories();
+            const parentCategories = categories.filter((category: CategoryEntity) => category.isParent);
+            return parentCategories.map((parentCategory: any) => {
+                if (!parentCategory.isParent) return;
+                parentCategory.dataValues.children = categories.filter((category: CategoryEntity) => category.parentId == parentCategory.id);
+                return parentCategory;
+            });
         } catch (error: any) {
             return new Error(error);
         }

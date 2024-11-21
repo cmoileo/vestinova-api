@@ -17,15 +17,5 @@ services:
     restart: always
     ports:
       - 8080:8080
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - ${PORT:-3000}:${PORT:-3000}
-    volumes:
-      - .:/usr/src/app
-    command: npm run dev
 volumes:
   db_data:
