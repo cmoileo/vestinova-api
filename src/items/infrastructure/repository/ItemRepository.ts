@@ -77,6 +77,10 @@ export class ItemRepository implements IItemRepository {
         const whereClause: any = {};
         const categoryWhereClause: any = [];
 
+        if (name) {
+            whereClause['name'] = { [Op.iLike]: `%${name}%` };
+        }
+
         if (priceRange) {
             const [minPrice, maxPrice] = priceRange.split('-').map(Number);
             whereClause['price'] = { [Op.between]: [minPrice, maxPrice] };
@@ -126,7 +130,6 @@ export class ItemRepository implements IItemRepository {
                 where: whereClause,
                 group: ['ItemEntity.id'],
                 limit: count,
-                having: Sequelize.where(Sequelize.col('name'), name)
             });
         }
 
@@ -164,7 +167,6 @@ export class ItemRepository implements IItemRepository {
                 ],
                 group: ['ItemEntity.id'],
                 limit: count,
-                having: Sequelize.where(Sequelize.col('name'), name)
             });
         }
 
