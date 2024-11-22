@@ -11,7 +11,7 @@ class ItemEntity extends Model {
     public imageIds!: string[];
     public categoryIds!: number[];
 
-    public setCategories!: (categories: CategoryEntity[]) => Promise<void>;
+    public addCategories!: (categories: CategoryEntity[]) => Promise<void>;
 }
 
 ItemEntity.init(
@@ -56,7 +56,7 @@ ItemEntity.init(
     }
 );
 
-ItemEntity.belongsToMany(CategoryEntity, {through: 'ItemCategory'})
-CategoryEntity.belongsToMany(ItemEntity, {through: 'ItemCategory'})
+ItemEntity.belongsToMany(CategoryEntity, {through: 'ItemCategory', as: 'categories'})
+CategoryEntity.belongsToMany(ItemEntity, {through: 'ItemCategory', as: 'items'})
 
 export default ItemEntity;

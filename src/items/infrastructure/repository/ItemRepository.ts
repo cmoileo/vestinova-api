@@ -37,7 +37,11 @@ export class ItemRepository implements IItemRepository {
                 limit: pagination,
                 include: {
                     model: CategoryEntity,
-                }
+                    as: 'categories',
+                },
+                order: [
+                    ['createdAt', 'DESC']
+                ]
             }
         );
     }
@@ -105,6 +109,7 @@ export class ItemRepository implements IItemRepository {
                 {
                     model: CategoryEntity,
                     required: true,
+                    as: 'categories',
                     through: { attributes: [] },
                     where: {
                         [Op.or]: categoryWhereClause
