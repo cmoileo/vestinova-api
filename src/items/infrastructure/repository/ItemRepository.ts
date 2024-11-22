@@ -29,7 +29,12 @@ export class ItemRepository implements IItemRepository {
         await ItemEntity.destroy({where: {id}});
     }
     async findItemById(id: string): Promise<ItemEntity | null> {
-        return await ItemEntity.findByPk(id);
+        return await ItemEntity.findByPk(id, {
+            include: {
+                model: CategoryEntity,
+                as: 'categories',
+            }
+        });
     }
     async findAllItems(pagination: any): Promise<ItemEntity[]> {
         return await ItemEntity.findAll(
