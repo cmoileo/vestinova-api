@@ -62,6 +62,7 @@ export class ItemRepository implements IItemRepository {
 
     async searchItems(search: string): Promise<any> {
         const searchParams = new URLSearchParams(search);
+        let name = searchParams.get('search');
         const brand = searchParams.getAll('brand');
         const type = searchParams.getAll('type');
         const size = searchParams.getAll('size');
@@ -69,6 +70,9 @@ export class ItemRepository implements IItemRepository {
         const sexe = searchParams.getAll('sexe');
         const priceRange = searchParams.get('priceRange');
         const count = Number(searchParams.get('count')) || 10;
+
+        // @ts-ignore
+        name = name.length > 0 ? name : null;
 
         const whereClause: any = {};
         const categoryWhereClause: any = [];
@@ -108,23 +112,72 @@ export class ItemRepository implements IItemRepository {
             });
         }
 
+        let items
 
-        const items = await ItemEntity.findAll({
-            include: [
-                {
-                    model: CategoryEntity,
-                    required: true,
-                    as: 'categories',
-                    through: { attributes: [] },
-                    where: {
-                        [Op.or]: categoryWhereClause
+        if (categoryWhereClause.length === 0 && !name) {
+            items = await ItemEntity.findAll({
+                group: ['ItemEntity.id'],
+                limit: count,
+                having: Sequelize.where(Sequelize.col('name'), name)
+            });
+        }
+        if (categoryWhereClause.length === 0 && name) {
+            items = await ItemEntity.findAll({
+                where: whereClause,
+                group: ['ItemEntity.id'],
+                limit: count,
+                having: Sequelize.where(Sequelize.col('name'), name)
+            });
+        }
+
+        if (categoryWhereClause.length > 0 && !name) {
+            items = await ItemEntity.findAll({
+                include: [
+                    {
+                        model: CategoryEntity,
+                        required: true,
+                        as: 'categories',
+                        through: { attributes: [] },
+                        where: {
+                            [Op.or]: categoryWhereClause,
+                        },
                     },
-                },
-            ],
-            group: ['ItemEntity.id'],
-            limit: count,
+                ],
+                group: ['ItemEntity.id'],
+                limit: count,
+            });
+        }
+
+        if (categoryWhereClause.length > 0 && name) {
+            items = await ItemEntity.findAll({
+                where: whereClause,
+                include: [
+                    {
+                        model: CategoryEntity,
+                        required: true,
+                        as: 'categories',
+                        through: { attributes: [] },
+                        where: {
+                            [Op.or]: categoryWhereClause,
+                        },
+                    },
+                ],
+                group: ['ItemEntity.id'],
+                limit: count,
+                having: Sequelize.where(Sequelize.col('name'), name)
+            });
+        }
+
+        if (!items) {
+            return [];
+        }
+
+        return items.filter(item => {
+            if (categoryWhereClause.length === 0) {
+                return true;
+            }
+            // @ts-ignore
+            return item.categories.length === categoryWhereClause.length;
         });
-        // @ts-ignore
-        return items.filter(item => item.categories.length === categoryWhereClause.length);
     }
 }
