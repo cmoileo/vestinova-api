@@ -125,6 +125,6 @@ export class ItemRepository implements IItemRepository {
             limit: count,
         });
         // @ts-ignore
-        return items.filter(item => item.CategoryEntities.length === categoryWhereClause.length);
+        return items.filter(item => item.categories.length === categoryWhereClause.length);
     }
 }
