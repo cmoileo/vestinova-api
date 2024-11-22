@@ -3,6 +3,7 @@ import ItemEntity from "../entity/Item.entity";
 import CategoryEntity from "../entity/Category.entity";
 import {col, fn, Op, Sequelize} from 'sequelize';
 import sequelize from "../../../../sequelize.config";
+import UserEntity from "../../../authentication/infrastructure/entity/User.entity";
 
 export class ItemRepository implements IItemRepository {
     async createItem(item: any): Promise<ItemEntity> {
@@ -30,10 +31,16 @@ export class ItemRepository implements IItemRepository {
     }
     async findItemById(id: string): Promise<ItemEntity | null> {
         return await ItemEntity.findByPk(id, {
-            include: {
-                model: CategoryEntity,
-                as: 'categories',
-            }
+            include: [
+                {
+                    model: CategoryEntity,
+                    as: 'categories',
+                },
+                {
+                    model: UserEntity,
+                    as: 'user',
+                },
+            ],
         });
     }
     async findAllItems(pagination: any): Promise<ItemEntity[]> {
