@@ -1,6 +1,7 @@
 import sequelize from "../../../../sequelize.config";
 import {DataTypes, Model} from "sequelize";
 import CategoryEntity from "./Category.entity";
+import UserEntity from "../../../authentication/infrastructure/entity/User.entity";
 
 class ItemEntity extends Model {
     public id!: string;
@@ -58,5 +59,6 @@ ItemEntity.init(
 
 ItemEntity.belongsToMany(CategoryEntity, {through: 'ItemCategory', as: 'categories'})
 CategoryEntity.belongsToMany(ItemEntity, {through: 'ItemCategory', as: 'items'})
+ItemEntity.hasOne(UserEntity, {foreignKey: 'id', sourceKey: 'userId', as: 'user'})
 
 export default ItemEntity;
