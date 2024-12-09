@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../../../sequelize.config';
+import ItemEntity from '../../../items/infrastructure/entity/Item.entity';
 
 class UserEntity extends Model {
     public id!: string;
@@ -45,5 +46,7 @@ UserEntity.init(
         tableName: 'users',
     }
 );
+
+// UserEntity.hasMany(ItemEntity, { foreignKey: 'userId', as: 'items' });
 
 export default UserEntity;

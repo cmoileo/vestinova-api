@@ -17,6 +17,9 @@ const authController = new AuthController(userRepository);
 router.post("/api/auth/register", authController.registerHandler);
 router.post("/api/auth/login", authController.loginHandler);
 router.put("/api/auth/update/:id", upload.single('avatar'), authController.updateHandler);
+router.get("/api/user/:userId/profile", authGuard, authController.getUserProfileHandler);
+router.get("/api/user/:userId/public", authGuard, authController.getUserPublicPageHandler);
+
 
 const itemRepository = new ItemRepository();
 const itemController = new ItemController(itemRepository);
