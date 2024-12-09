@@ -53,6 +53,9 @@ export class ItemRepository implements IItemRepository {
                 model: CategoryEntity,
                 as: 'categories',
             },
+            attributes: {
+                exclude: ['cartId']
+            },
             order: [
                 ['createdAt', 'DESC']
             ]
@@ -154,6 +157,9 @@ export class ItemRepository implements IItemRepository {
                         },
                     },
                 ],
+                attributes: {
+                    exclude: ['cartId']
+                },
                 group: ['ItemEntity.id'],
                 limit: count,
             });

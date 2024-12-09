@@ -1,7 +1,5 @@
 import sequelize from "../../../../sequelize.config";
 import { DataTypes, Model } from "sequelize";
-import CategoryEntity from "./Category.entity";
-import UserEntity from "../../../authentication/infrastructure/entity/User.entity";
 
 class ItemEntity extends Model {
     public id!: string;
@@ -10,6 +8,7 @@ class ItemEntity extends Model {
     public price!: number;
     public userId!: string;
     public imageUrl!: string;
+    public cartId!: number;
 }
 
 ItemEntity.init(
@@ -46,6 +45,10 @@ ItemEntity.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        cartId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        }
     },
     {
         sequelize,
