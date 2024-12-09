@@ -6,7 +6,7 @@ export class CartRepository implements ICartRepository{
     async addItemToCart(itemId: string, cartId: number): Promise<void> {
         try {
             await CartItemEntity.create({
-                cartId: cartId,
+                CartEntityId: cartId,
                 ItemEntityId: itemId
             });
         } catch (e) {
@@ -35,10 +35,11 @@ export class CartRepository implements ICartRepository{
     }
 
     async deleteCartItem(cartId: number): Promise<void> {
+        console.log(cartId);
         try {
             await CartItemEntity.destroy({
                 where: {
-                    cartId: cartId
+                    CartEntityId: cartId
                 }
             });
         } catch (e) {

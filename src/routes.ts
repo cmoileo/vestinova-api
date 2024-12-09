@@ -13,6 +13,14 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+const cartRepository = new CartRepository();
+const cartController = new CartController(cartRepository);
+
+router.put("/api/cart/:id", authGuard, cartController.addItemToCart);
+router.patch("/api/cart/:id", authGuard, cartController.deleteCartItem);
+router.delete("/api/cart/:id", authGuard, cartController.clearCart);
+router.get("/api/cart-items", authGuard, cartController.getCartItems);
+
 const userRepository = new UserRepository();
 const authController = new AuthController(userRepository);
 
@@ -36,13 +44,5 @@ router.get("/api/items-categories", itemController.getCategories);
 router.get("/api/items-search", itemController.searchItems);
 router.post("/api/items/:itemId/like", authGuard, itemController.likeItemHandler);
 router.get("/api/items/:itemId/likes", itemController.getLikesHandler);
-
-const cartRepository = new CartRepository();
-const cartController = new CartController(cartRepository);
-
-router.put("/api/cart", authGuard, cartController.addItemToCart);
-router.patch("/api/cart/:id", authGuard, cartController.deleteCartItem);
-router.delete("/api/cart/:id", authGuard, cartController.clearCart);
-router.get("/api/cart-items", authGuard, cartController.getCartItems);
 
 export default router;

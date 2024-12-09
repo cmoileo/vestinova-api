@@ -13,13 +13,12 @@ export class CartController {
     }
 
     public async addItemToCart(req: any, res: any): Promise<void> {
-        const body = req.body;
-        const itemId = body.itemId;
-        console.log(req);
+        const itemId = req.params.id;
         const userId = req.user.id;
         const cart = await this.cartRepository.getCartItems(userId);
+        console.log(cart.dataValues);
         try {
-            await this.cartRepository.addItemToCart(itemId, cart.id);
+            await this.cartRepository.addItemToCart(itemId, cart.dataValues.id);
             res.status(201).send();
         } catch (e) {
 
@@ -39,11 +38,11 @@ export class CartController {
 
     public async deleteCartItem(req: any, res: any): Promise<void> {
         const cartId = req.params.id;
+        console.log(cartId)
         try {
             await this.cartRepository.deleteCartItem(cartId);
             res.status(204).send();
         } catch (e) {
-            console.log(e);
             throw e;
         }
     }
