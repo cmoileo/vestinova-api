@@ -27,7 +27,7 @@ export class CartController {
     }
 
     public async getCartItems(req: any, res: any): Promise<any> {
-        const cartId = req.params.id;
+        const userId = req.userId;
         try {
             return await this.cartRepository.getCartItems(cartId);
             res.status(200).send();

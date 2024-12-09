@@ -14,13 +14,18 @@ export class CartRepository implements ICartRepository{
         }
     }
 
-    async getCartItems(cartId: number): Promise<any> {
+    async getCartItems(userId: string): Promise<any> {
         try {
-            return await CartItemEntity.findAll({
+            return await CartEntity.findOne({
                 where: {
-                    cartId: cartId
+                    userId: userId
                 },
-                include: CartEntity
+                include: [
+                    {
+                        model: CartItemEntity,
+                        as: 'cartItems'
+                    }
+                ]
             });
         } catch (e) {
             console.log(e);

@@ -43,6 +43,6 @@ const cartController = new CartController(cartRepository);
 router.put("/api/cart/add", authGuard, cartController.addItemToCart);
 router.patch("/api/cart/:id", authGuard, cartController.deleteCartItem);
 router.delete("/api/cart/:id", authGuard, cartController.clearCart);
-router.get("/api/cart/:id", authGuard, cartController.getCartItems);
+router.get("/api/cart-items", authGuard, cartController.getCartItems);
 
 export default router;
