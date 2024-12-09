@@ -5,6 +5,8 @@ import authGuard from "./shared/middleware/auth.guard";
 import {ItemRepository} from "./items/infrastructure/repository/ItemRepository";
 import {ItemController} from "./items/presentation/controller/controller";
 import multer from 'multer';
+import {CartRepository} from "./cart/infrastructure/repository/CartRepository";
+import {CartController} from "./cart/presentation/controller";
 
 const router = express.Router();
 
@@ -34,5 +36,13 @@ router.get("/api/items-categories", itemController.getCategories);
 router.get("/api/items-search", itemController.searchItems);
 router.post("/api/items/:itemId/like", authGuard, itemController.likeItemHandler);
 router.get("/api/items/:itemId/likes", itemController.getLikesHandler);
+
+const cartRepository = new CartRepository();
+const cartController = new CartController(cartRepository);
+
+router.put("/api/cart/add", authGuard, cartController.addItemToCart);
+router.patch("/api/cart/:id", authGuard, cartController.deleteCartItem);
+router.delete("/api/cart/:id", authGuard, cartController.clearCart);
+router.get("/api/cart/:id", authGuard, cartController.getCartItems);
 
 export default router;

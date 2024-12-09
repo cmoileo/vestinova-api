@@ -2,6 +2,7 @@ import {UserModel} from "../model/User.model";
 import {UserRepository} from "../../infrastructure/repository/UserRepository";
 import hashPasswordService from "../../../shared/service/hashPassword.service";
 import jwtService from "../../../shared/service/jwt.service";
+import {CartRepository} from "../../../cart/infrastructure/repository/CartRepository";
 
 export class CreateUserUseCase {
     constructor(
@@ -39,6 +40,7 @@ export class CreateUserUseCase {
             }
             newUser.password = await hashPasswordService.hashPassword(newUser.password);
             const createdUser = await this.userRepository.createUser(newUser);
+            await new CartRepository().createCart(createdUser.id);
             return {
                 token: await jwtService.generateToken({ id: createdUser.id }, '30d')
             }

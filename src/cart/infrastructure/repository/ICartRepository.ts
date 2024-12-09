@@ -1,6 +1,7 @@
 export interface ICartRepository {
-    addItemToCart(data: any): Promise<any>;
-    getCartItems(): Promise<any>;
-    deleteCartItem(id: string): Promise<any>;
-    clearCart(): Promise<any>;
+    addItemToCart(itemId: string, cartId: number): Promise<any>;
+    getCartItems(cartId: number): Promise<any>;
+    deleteCartItem(cartId: number): Promise<any>;
+    clearCart(cartId: number): Promise<any>;
+    createCart(userId: string): Promise<any>;
 }
