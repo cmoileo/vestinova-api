@@ -13,6 +13,7 @@ ItemEntity.belongsToMany(CategoryEntity, { through: "ItemCategory", as: "categor
 CategoryEntity.belongsToMany(ItemEntity, { through: "ItemCategory", as: "items" });
 
 CartEntity.belongsToMany(ItemEntity, { through: "cart_item", as: "items" });
+ItemEntity.belongsToMany(CartEntity, { through: "cart_item", as: "carts" });
 
 export { sequelize, UserEntity, ItemEntity, CategoryEntity };
 

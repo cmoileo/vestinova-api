@@ -12,12 +12,12 @@ CartItemEntity.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        cartId: {
+        CartEntityId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: { model: Cart, key: 'id' },
         },
-        itemId: {
+        ItemEntityId: {
             type: DataTypes.UUID,
             allowNull: false,
             references: { model: Item, key: 'id' },

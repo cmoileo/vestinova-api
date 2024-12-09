@@ -1,4 +1,3 @@
-import {ICartRepository} from "../infrastructure/repository/ICartRepository";
 import {CartRepository} from "../infrastructure/repository/CartRepository";
 
 export class CartController {
@@ -27,10 +26,9 @@ export class CartController {
     }
 
     public async getCartItems(req: any, res: any): Promise<any> {
-        const userId = req.userId;
+        const userId = req.user.id;
         try {
-            return await this.cartRepository.getCartItems(cartId);
-            res.status(200).send();
+            res.status(200).json(await this.cartRepository.getCartItems(userId));
         } catch (e) {
             console.log(e);
             throw e;

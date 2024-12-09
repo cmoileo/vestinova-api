@@ -1,6 +1,7 @@
 import {ICartRepository} from "./ICartRepository";
 import CartEntity from "../entity/Cart.entity";
 import CartItemEntity from "../entity/CartItem.entity";
+import {ItemEntity} from "../../../models";
 export class CartRepository implements ICartRepository{
     async addItemToCart(itemId: string, cartId: number): Promise<void> {
         try {
@@ -22,8 +23,8 @@ export class CartRepository implements ICartRepository{
                 },
                 include: [
                     {
-                        model: CartItemEntity,
-                        as: 'cartItems'
+                        model: ItemEntity,
+                        as: 'items'
                     }
                 ]
             });
