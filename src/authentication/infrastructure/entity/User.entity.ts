@@ -47,6 +47,4 @@ UserEntity.init(
     }
 );
 
-// UserEntity.hasMany(ItemEntity, { foreignKey: 'userId', as: 'items' });
-
 export default UserEntity;
