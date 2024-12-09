@@ -31,6 +31,7 @@ export class ItemController {
         this.searchItems = this.searchItems.bind(this);
         this.likeItemHandler = this.likeItemHandler.bind(this);
         this.getLikesHandler = this.getLikesHandler.bind(this);
+        this.getItemsCount = this.getItemsCount.bind(this);
     }
     public async createItem(req: any, res: any): Promise<void> {
         const item: any = {
@@ -138,6 +139,15 @@ export class ItemController {
         try {
             const likesCount = await this.ratingRepository.getRatingsByItemId(itemId);
             res.status(200).json({ likes: likesCount });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    public async getItemsCount(req, res): Promise<void> {
+        try {
+            const count = await this.itemRepository.getItemsCount();
+            res.status(200).json(count);
         } catch (error) {
             res.status(400).json({ error: error.message });
         }

@@ -25,6 +25,7 @@ const itemRepository = new ItemRepository();
 const itemController = new ItemController(itemRepository);
 
 router.post("/api/items", authGuard, upload.single('image'), itemController.createItem);
+router.get("/api/items/count", authGuard, itemController.getItemsCount);
 router.delete("/api/items/:id", authGuard, itemController.deleteItem);
 router.get("/api/items/:id", authGuard, itemController.findItemById);
 router.get("/api/items", authGuard, itemController.getItems);
