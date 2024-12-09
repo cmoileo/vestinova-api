@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import {CreateUserUseCase} from "../../domain/use-case/create-user.use-case";
 import {IUserRepository} from "../../infrastructure/repository/IUserRepository";
 import {isCreateUserDto} from "../dto/createUser.dto";
-import hashPasswordService from "../../../shared/service/hashPassword.service";
 import {isLoginUserDto} from "../dto/loginUser.dto";
 import {CreateUserUseCase} from "../../domain/use-case/create-user.use-case";
 import {LoginUserUseCase} from "../../domain/use-case/login-user.use-case";
@@ -20,6 +18,7 @@ export class AuthController {
     this.registerHandler = this.registerHandler.bind(this);
     this.loginHandler = this.loginHandler.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
+    this.getUserProfileHandler = this.getUserProfileHandler.bind(this);
   }
 
   public async registerHandler(req: Request, res: Response) {
@@ -62,4 +61,29 @@ export class AuthController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  public async getUserProfileHandler(req: Request, res: Response) {
+    console.log("Route hit: /api/user/:userId/profile");
+    console.log("UserRepository instance:", this.userRepository);
+
+    const userId = req.params.userId;
+    console.log("User ID received:", userId);
+
+    try {
+        const user = await this.userRepository.getUserById(userId);
+        if (!user) {
+            console.log("User not found in database");
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        console.log("User found:", user);
+        res.status(200).json(user);
+    } catch (error: any) {
+        console.error("Error in getUserProfileHandler:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+  }
+
+
+
 }

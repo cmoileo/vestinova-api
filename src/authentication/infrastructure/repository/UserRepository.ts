@@ -1,14 +1,18 @@
 import { IUserRepository } from './IUserRepository';
 import UserEntity from '../../infrastructure/entity/User.entity';
+import { UserModel } from '../../domain/model/User.model';
 
 export class UserRepository implements IUserRepository {
-    async getUserById(id: string): Promise<UserEntity> {
-        const user = await UserEntity.findByPk(id);
-        if (!user) {
-            throw new Error('User not found');
+    public async getUserById(userId: string): Promise<any | null> {
+        try {
+            const user = await UserEntity.findByPk(userId);
+            return user ? user.toJSON() : null;
+        } catch (error) {
+            throw new Error(`Failed to retrieve user: ${error.message}`);
         }
-        return user;
     }
+    
+    
 
     async getUsers(): Promise<UserEntity[]> {
         return UserEntity.findAll();
