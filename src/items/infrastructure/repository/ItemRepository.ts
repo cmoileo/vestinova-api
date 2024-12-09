@@ -42,19 +42,21 @@ export class ItemRepository implements IItemRepository {
             ],
         });
     }
-    async findAllItems(pagination: any): Promise<ItemEntity[]> {
-        return await ItemEntity.findAll(
-            {
-                limit: pagination,
-                include: {
-                    model: CategoryEntity,
-                    as: 'categories',
-                },
-                order: [
-                    ['createdAt', 'DESC']
-                ]
-            }
-        );
+    async findAllItems(pagination: number): Promise<ItemEntity[]> {
+        const limit = 9;
+        const offset = (pagination - 1) * limit;
+
+        return await ItemEntity.findAll({
+            limit: limit,
+            offset: offset,
+            include: {
+                model: CategoryEntity,
+                as: 'categories',
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        });
     }
 
     async updateItem(id: string, item: ItemEntity): Promise<ItemEntity | null> {
