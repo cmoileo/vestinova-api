@@ -21,6 +21,24 @@ export class UserRepository implements IUserRepository {
         return userEntity;
     }
     
+    async getUserByIdWithItems(userId: string): Promise<any> {
+        try {
+            const user = await UserEntity.findByPk(userId, {
+                include: [
+                    {
+                        model: ItemEntity,
+                        as: "items",
+                        attributes: ["id", "name", "description", "price"],
+                    },
+                ],
+            });
+    
+            return user;
+        } catch (error) {
+            console.error("Error in getUserByIdWithItems:", error.message);
+            throw error;
+        }
+    }
     
 
     async getUsers(): Promise<UserEntity[]> {
