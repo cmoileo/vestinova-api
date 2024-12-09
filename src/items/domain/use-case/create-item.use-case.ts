@@ -18,8 +18,7 @@ export class CreateItemUseCase {
 
             if (file) {
                 const image: any = await this.imageStorageService.uploadImage(file);
-                const imageUrl = await this.imageStorageService.getImageUrl(image.fullPath);
-                console.log(imageUrl);
+                const imageUrl = await this.imageStorageService.getImageUrl(image.path);
                 newItem.setImageUrl(imageUrl);
             }
             if (item.categoryIds) {
