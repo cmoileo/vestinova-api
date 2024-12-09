@@ -7,7 +7,7 @@ export class CartRepository implements ICartRepository{
         try {
             await CartItemEntity.create({
                 cartId: cartId,
-                itemId: itemId
+                ItemEntityId: itemId
             });
         } catch (e) {
             console.log(e);

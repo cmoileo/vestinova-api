@@ -15,12 +15,14 @@ export class CartController {
     public async addItemToCart(req: any, res: any): Promise<void> {
         const body = req.body;
         const itemId = body.itemId;
-        const cartId = body.cartId;
+        console.log(req);
+        const userId = req.user.id;
+        const cart = await this.cartRepository.getCartItems(userId);
         try {
-            await this.cartRepository.addItemToCart(itemId, cartId);
+            await this.cartRepository.addItemToCart(itemId, cart.id);
             res.status(201).send();
         } catch (e) {
-            console.log(e);
+
             throw e;
         }
     }

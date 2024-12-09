@@ -40,7 +40,7 @@ router.get("/api/items/:itemId/likes", itemController.getLikesHandler);
 const cartRepository = new CartRepository();
 const cartController = new CartController(cartRepository);
 
-router.put("/api/cart/add", authGuard, cartController.addItemToCart);
+router.put("/api/cart", authGuard, cartController.addItemToCart);
 router.patch("/api/cart/:id", authGuard, cartController.deleteCartItem);
 router.delete("/api/cart/:id", authGuard, cartController.clearCart);
 router.get("/api/cart-items", authGuard, cartController.getCartItems);
