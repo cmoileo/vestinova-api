@@ -29,7 +29,6 @@ export class ImageStorageService {
 
     public async getImageUrl(path: string): Promise<string> {
         const data: any = await this.supabase.storage.from(ImageStorageService.bucketName).getPublicUrl(path);
-
         return data.data.publicUrl as string;
     }
 

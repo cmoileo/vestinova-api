@@ -53,6 +53,4 @@ ItemEntity.init(
     }
 );
 
-ItemEntity.belongsTo(UserEntity, { foreignKey: "userId", as: "user" });
-
 export default ItemEntity;
