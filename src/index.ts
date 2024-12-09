@@ -1,3 +1,4 @@
+import { initializeDatabase } from "./models";
 import express from "express";
 import cors from "cors";
 import sequelize from "../sequelize.config";
@@ -7,6 +8,7 @@ import bodyParser from "body-parser";
 
 const initDb = async () => {
     try {
+        await initializeDatabase();
         await sequelize.authenticate();
         await sequelize.sync();
         // await seedCategories();

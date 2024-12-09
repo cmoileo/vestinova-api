@@ -64,8 +64,6 @@ export class AuthController {
 
   public async getUserProfileHandler(req: Request, res: Response) {
     console.log("Route hit: /api/user/:userId/profile");
-    console.log("UserRepository instance:", this.userRepository);
-
     const userId = req.params.userId;
     console.log("User ID received:", userId);
 
@@ -76,13 +74,23 @@ export class AuthController {
             return res.status(404).json({ error: "User not found" });
         }
 
-        console.log("User found:", user);
-        res.status(200).json(user);
+        const response = {
+            id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            avatar: user.avatar,
+            items: user.items,
+        };
+
+        console.log("User profile:", response);
+        res.status(200).json(response);
     } catch (error: any) {
         console.error("Error in getUserProfileHandler:", error.message);
         res.status(500).json({ error: error.message });
-    }
+      }
   }
+
 
 
 

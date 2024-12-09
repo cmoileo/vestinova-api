@@ -57,8 +57,8 @@ ItemEntity.init(
     }
 );
 
-ItemEntity.belongsToMany(CategoryEntity, {through: 'ItemCategory', as: 'categories'})
-CategoryEntity.belongsToMany(ItemEntity, {through: 'ItemCategory', as: 'items'})
-ItemEntity.hasOne(UserEntity, {foreignKey: 'id', sourceKey: 'userId', as: 'user'})
+// ItemEntity.belongsToMany(CategoryEntity, {through: 'ItemCategory', as: 'categories'})
+// CategoryEntity.belongsToMany(ItemEntity, {through: 'ItemCategory', as: 'items'})
+// ItemEntity.hasOne(UserEntity, {foreignKey: 'id', sourceKey: 'userId', as: 'user'})
 
 export default ItemEntity;
