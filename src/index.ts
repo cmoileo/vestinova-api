@@ -8,7 +8,7 @@ import bodyParser from "body-parser";
 const initDb = async () => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync();
+        await sequelize.sync({ alter: true });
         // await seedCategories();
     } catch (error) {
         console.error("Unable to connect to the database:", error);
@@ -19,6 +19,7 @@ initDb()
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 

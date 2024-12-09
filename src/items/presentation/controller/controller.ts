@@ -32,15 +32,17 @@ export class ItemController {
         this.likeItemHandler = this.likeItemHandler.bind(this);
         this.getLikesHandler = this.getLikesHandler.bind(this);
     }
-    public async createItem(req: Request, res: any): Promise<void> {
-        const item: any = req.body;
-        //@ts-ignore
-        const images = item.images.map(base64 => Buffer.from(base64, 'base64'));
-        console.log(images);
-        //@ts-ignore
+    public async createItem(req: any, res: any): Promise<void> {
+        const item: any = {
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            categoryIds: req.body.categoryIds.split(','),
+        };
+        const file = req.file;
         const userId = req.user.id;
         try {
-            const createdItem: ItemEntity | Error  = await new CreateItemUseCase(this.itemRepository).execute(item, userId, images);
+            const createdItem: ItemEntity | Error  = await new CreateItemUseCase(this.itemRepository).execute(item, userId, file);
             res.status(201).json(createdItem);
         } catch (error: any) {
             res.status(400).json({ error: error.message });

@@ -2,7 +2,6 @@ import {IItemRepository} from "./IItemRepository";
 import ItemEntity from "../entity/Item.entity";
 import CategoryEntity from "../entity/Category.entity";
 import {col, fn, Op, Sequelize} from 'sequelize';
-import sequelize from "../../../../sequelize.config";
 import UserEntity from "../../../authentication/infrastructure/entity/User.entity";
 
 export class ItemRepository implements IItemRepository {

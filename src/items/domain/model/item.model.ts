@@ -3,9 +3,10 @@ export class ItemModel {
     public description: string | undefined;
     public price: number | undefined;
     public userId: string | undefined;
-    public imageIds: string[] | undefined;
+    public imageId: string | undefined;
     public categoryIds: string[] | undefined;
-    public imagesUrls: string[] | undefined;
+    public imageUrl: string | undefined;
+    public file: File | undefined
 
     public setName(name: string): void | Error {
         if (name.length < 2) {
@@ -41,8 +42,12 @@ export class ItemModel {
         this.userId = userId;
     }
 
-    public setImagesIds(images: string[]): void {
-        this.imageIds = images;
+    public setImagesId(image: string): void {
+        this.imageId = image;
+    }
+
+    public setImageUrl(path: string): void {
+        this.imageUrl = path;
     }
 
     public setCategoryIds(categories: string[]): void {

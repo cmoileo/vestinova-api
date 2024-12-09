@@ -17,26 +17,20 @@ export class ImageStorageService {
     }
 
     public async uploadImage(file: any): Promise<string> {
-        const id = uuid();
-        console.log("file : ", file)
         const { data, error } = await this.supabase.storage
             .from(ImageStorageService.bucketName)
-            .upload(id, file.buffer);
+            .upload(`./${Date.now()}_${file.originalname}`, file.buffer, { contentType: file.mimetype });
         if (error) {
             console.log(error);
             throw error;
         }
-        return data.id;
+        return data;
     }
 
-    public async getImageUrl(id: string, fileName: string): Promise<string> {
-        const path = `${id}/${fileName}`;
-        // @ts-ignore
-        const { publicURL, error } = this.supabase.storage.from(ImageStorageService.bucketName).getPublicUrl(path);
-        if (error) {
-            throw error;
-        }
-        return publicURL;
+    public async getImageUrl(path: string): Promise<string> {
+        const data: any = await this.supabase.storage.from(ImageStorageService.bucketName).getPublicUrl(path);
+
+        return data.data.publicUrl as string;
     }
 
     public async deleteImage(id: string, fileName: string): Promise<void> {

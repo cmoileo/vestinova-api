@@ -11,15 +11,16 @@ export class CreateItemUseCase {
         this.itemRepository = itemRepository;
         this.imageStorageService = new ImageStorageService();
     }
-    public async execute(item: ItemModel, userId: string, images: File[]): Promise<ItemEntity | Error> {
+    public async execute(item: ItemModel, userId: string, file: any): Promise<ItemEntity | Error> {
         try {
             const newItem = new ItemModel()
              if (typeof item === "string") item = JSON.parse(item);
 
-            if (images) {
-                let imageIds = [];
-                imageIds = await Promise.all(images.map(image => this.imageStorageService.uploadImage(image)));
-                newItem.setImagesIds(imageIds);
+            if (file) {
+                const image: any = await this.imageStorageService.uploadImage(file);
+                const imageUrl = await this.imageStorageService.getImageUrl(image.fullPath);
+                console.log(imageUrl);
+                newItem.setImageUrl(imageUrl);
             }
             if (item.categoryIds) {
                 newItem.setCategoryIds(item.categoryIds);
@@ -43,6 +44,7 @@ export class CreateItemUseCase {
             if (userIdError instanceof Error) {
                 return userIdError;
             }
+            console.log("new item: ", newItem);
             return await this.itemRepository.createItem(newItem);
         } catch (error) {
             throw error;

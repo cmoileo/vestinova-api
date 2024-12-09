@@ -1,11 +1,11 @@
-import {DataTypes, Model} from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../../../../sequelize.config";
 
 class CategoryEntity extends Model {
     public id!: number;
     public name!: string;
     public isParent!: boolean;
-    public parentId?: string;
+    public parentId?: number;
 }
 
 CategoryEntity.init(
@@ -19,19 +19,28 @@ CategoryEntity.init(
         name: {
             type: DataTypes.STRING(30),
             allowNull: false,
+            validate: {
+                len: [1, 30],
+            },
         },
         isParent: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
         parentId: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            references: {
+                model: "categories",
+                key: "id",
+            },
         },
     },
     {
         sequelize,
-        tableName: 'categories',
+        tableName: "categories",
     }
-)
+);
+
 export default CategoryEntity;

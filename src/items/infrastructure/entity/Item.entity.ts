@@ -1,5 +1,5 @@
 import sequelize from "../../../../sequelize.config";
-import {DataTypes, Model} from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import CategoryEntity from "./Category.entity";
 import UserEntity from "../../../authentication/infrastructure/entity/User.entity";
 
@@ -9,10 +9,7 @@ class ItemEntity extends Model {
     public description!: string;
     public price!: number;
     public userId!: string;
-    public imageIds!: string[];
-    public categoryIds!: number[];
-
-    public addCategories!: (categories: CategoryEntity[]) => Promise<void>;
+    public imageUrl!: string;
 }
 
 ItemEntity.init(
@@ -26,6 +23,9 @@ ItemEntity.init(
         name: {
             type: DataTypes.STRING(30),
             allowNull: false,
+            validate: {
+                len: [1, 30],
+            },
         },
         description: {
             type: DataTypes.STRING(255),
@@ -36,29 +36,23 @@ ItemEntity.init(
             allowNull: false,
             validate: {
                 min: 0,
-            }
+            },
         },
         userId: {
             type: DataTypes.UUID,
             allowNull: false,
         },
-        imageIds: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true,
-        },
-        categoryIds: {
-            type: DataTypes.ARRAY(DataTypes.INTEGER),
+        imageUrl: {
+            type: DataTypes.STRING,
             allowNull: true,
         },
     },
     {
         sequelize,
-        tableName: 'items',
+        tableName: "items",
     }
 );
 
-ItemEntity.belongsToMany(CategoryEntity, {through: 'ItemCategory', as: 'categories'})
-CategoryEntity.belongsToMany(ItemEntity, {through: 'ItemCategory', as: 'items'})
-ItemEntity.hasOne(UserEntity, {foreignKey: 'id', sourceKey: 'userId', as: 'user'})
+ItemEntity.belongsTo(UserEntity, { foreignKey: "userId", as: "user" });
 
 export default ItemEntity;
