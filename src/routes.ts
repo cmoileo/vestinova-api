@@ -44,5 +44,6 @@ router.get("/api/items-categories", itemController.getCategories);
 router.get("/api/items-search", itemController.searchItems);
 router.post("/api/items/:itemId/like", authGuard, itemController.likeItemHandler);
 router.get("/api/items/:itemId/likes", itemController.getLikesHandler);
+router.get("/api/user/liked-items", authGuard, itemController.getLikedItems);
 
 export default router;

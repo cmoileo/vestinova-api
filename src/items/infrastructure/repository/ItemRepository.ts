@@ -196,8 +196,4 @@ export class ItemRepository implements IItemRepository {
             return item.categories.length === categoryWhereClause.length;
         });
     }
-
-    public async getItemsCount(): Promise<number> {
-        return await ItemEntity.count();
-    }
 }

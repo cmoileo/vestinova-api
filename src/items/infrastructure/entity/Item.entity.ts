@@ -1,5 +1,6 @@
 import sequelize from "../../../../sequelize.config";
 import { DataTypes, Model } from "sequelize";
+import { UserEntity } from "../../../models";
 
 class ItemEntity extends Model {
     public id!: string;
@@ -55,5 +56,6 @@ ItemEntity.init(
         tableName: "items",
     }
 );
+
 
 export default ItemEntity;

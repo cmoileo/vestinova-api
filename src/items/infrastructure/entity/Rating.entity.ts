@@ -5,6 +5,7 @@ import UserEntity from '../../../authentication/infrastructure/entity/User.entit
 import ItemEntity from './Item.entity';
 
 class RatingEntity extends Model {
+    [x: string]: any;
     public id!: string;
     public userId!: string;
     public itemId!: string;
@@ -42,10 +43,8 @@ RatingEntity.init(
 );
 
 
-RatingEntity.belongsTo(UserEntity, { foreignKey: 'userId', onDelete: 'CASCADE' });
-RatingEntity.belongsTo(ItemEntity, { foreignKey: 'itemId', onDelete: 'CASCADE' });
+RatingEntity.belongsTo(UserEntity, { foreignKey: "userId", onDelete: "CASCADE" });
+RatingEntity.belongsTo(ItemEntity, { foreignKey: "itemId", as: "item", onDelete: "CASCADE" });
 
-UserEntity.hasMany(RatingEntity, { foreignKey: 'userId' });
-ItemEntity.hasMany(RatingEntity, { foreignKey: 'itemId' });
 
 export default RatingEntity;

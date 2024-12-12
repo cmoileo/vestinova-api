@@ -10,9 +10,6 @@ import {GetCategoriesUseCase} from "../../domain/use-case/get-categories.use-cas
 import {SearchItemsUseCase} from "../../domain/use-case/search-items.use-case";
 import { LikeItemUseCase } from "../../domain/use-case/like-item.use-case";
 import { RatingRepository } from "../../infrastructure/repository/RatingRepository";
-import {Http2ServerResponse} from "node:http2";
-import {ServerResponse} from "node:http";
-import {ItemModel} from "../../domain/model/item.model";
 
 export class ItemController {
     private readonly itemRepository: ItemRepository;
@@ -32,6 +29,7 @@ export class ItemController {
         this.likeItemHandler = this.likeItemHandler.bind(this);
         this.getLikesHandler = this.getLikesHandler.bind(this);
         this.getItemsCount = this.getItemsCount.bind(this);
+        this.getLikedItems = this.getLikedItems.bind(this);
     }
     public async createItem(req: any, res: any): Promise<void> {
         const item: any = {
@@ -143,6 +141,20 @@ export class ItemController {
             res.status(400).json({ error: error.message });
         }
     }
+
+    public async getLikedItems(req: Request, res: Response): Promise<void> {
+        const userId = req.user.id;
+
+        try {
+            const likedItems = await this.ratingRepository.getLikedItemsByUser(userId);
+            res.status(200).json(likedItems);
+        } catch (error) {
+            console.error("Error fetching liked items:", error);
+            res.status(500).json({ error: "Unable to fetch liked items" });
+        }
+    }
+    
+    
 
     public async getItemsCount(req, res): Promise<void> {
         try {
