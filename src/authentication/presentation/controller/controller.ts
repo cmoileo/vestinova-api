@@ -47,21 +47,27 @@ export class AuthController {
   public async updateHandler(req: Request, res: Response) {
     const userId = req.params.id;
     const avatarFile = req.file;
-
-    if (!avatarFile) {
-      return res.status(400).json({ error: "Avatar file is required" });
-    }
+    const { firstname, lastname, email } = req.body; 
 
     try {
-      const avatarUrl = await new UpdateUserUseCase(this.userRepository, this.imageStorageService).execute({
-        userId,
-        avatarFile,
-      });
-      res.status(200).json({ avatarUrl });
+        const updatedUser = await new UpdateUserUseCase(this.userRepository, this.imageStorageService).execute({
+            userId,
+            avatarFile,
+            firstname,
+            lastname,
+            email,
+        });
+
+        if (updatedUser instanceof Error) {
+            throw updatedUser;
+        }
+
+        res.status(200).json({ user: updatedUser });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
-  }
+}
+
 
   public async getUserProfileHandler(req: Request, res: Response) {
     console.log("Route hit: /api/user/:userId/profile");

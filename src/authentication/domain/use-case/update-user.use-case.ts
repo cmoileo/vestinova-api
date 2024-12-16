@@ -8,16 +8,30 @@ export class UpdateUserUseCase {
         private readonly imageStorageService: ImageStorageService
     ) {}
 
-    public async execute(data: { userId: string, avatarFile: any }): Promise<string | Error> {
+    public async execute(data: {
+        userId: string;
+        firstname?: string;
+        lastname?: string;
+        email?: string;
+        avatarFile?: any;
+    }): Promise<UserModel | Error> {
         try {
             const user = await this.userRepository.getUserById(data.userId);
             if (!user) {
                 throw new Error('User not found');
             }
-            const avatarUrl = await this.imageStorageService.uploadImage(data.avatarFile);
-            user.avatar = avatarUrl;
+
+            if (data.avatarFile) {
+                const avatarUrl = await this.imageStorageService.uploadImage(data.avatarFile);
+                user.avatar = avatarUrl;
+            }
+
+            if (data.firstname) user.firstname = data.firstname;
+            if (data.lastname) user.lastname = data.lastname;
+            if (data.email) user.email = data.email;
+
             await user.save();
-            return avatarUrl;
+            return user;
         } catch (error) {
             return error;
         }
