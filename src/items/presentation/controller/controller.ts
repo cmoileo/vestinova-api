@@ -30,6 +30,7 @@ export class ItemController {
         this.getLikesHandler = this.getLikesHandler.bind(this);
         this.getItemsCount = this.getItemsCount.bind(this);
         this.getLikedItems = this.getLikedItems.bind(this);
+        this.getItemsByCategory = this.getItemsByCategory.bind(this);
     }
     public async createItem(req: any, res: any): Promise<void> {
         const item: any = {
@@ -164,4 +165,41 @@ export class ItemController {
             res.status(400).json({ error: error.message });
         }
     }
+
+    public async getItemsByCategory(req: any, res: any): Promise<void> {
+        try {
+            const { categoryName } = req.params;
+            console.log("Paramètre reçu pour la catégorie :", categoryName);
+    
+            const categoryMap: { [key: string]: string } = {
+                homme: "Male",
+                femme: "Female",
+            };
+    
+            const translatedCategory = categoryMap[categoryName.toLowerCase()];
+            console.log("Catégorie traduite :", translatedCategory);
+    
+            if (!translatedCategory) {
+                console.log("Catégorie invalide !");
+                return res.status(400).json({ error: "Catégorie invalide." });
+            }
+    
+            const items = await this.itemRepository.getItemsByCategory(translatedCategory);
+            console.log("Articles récupérés :", items);
+    
+            if (!items || items.length === 0) {
+                console.log("Aucun article trouvé.");
+                return res.status(404).json({ message: "Aucun article trouvé dans cette catégorie." });
+            }
+    
+            res.status(200).json(items);
+        } catch (error) {
+            console.error("Erreur dans getItemsByCategory :", error);
+            res.status(500).json({ error: "Erreur lors de la récupération des articles." });
+        }
+    }
+    
+    
+    
+    
 }

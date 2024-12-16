@@ -3,6 +3,7 @@ import ItemEntity from "../entity/Item.entity";
 import CategoryEntity from "../entity/Category.entity";
 import {col, fn, Op, Sequelize} from 'sequelize';
 import UserEntity from "../../../authentication/infrastructure/entity/User.entity";
+import { getRepository } from "typeorm";
 
 export class ItemRepository implements IItemRepository {
     async createItem(item: any): Promise<ItemEntity> {
@@ -70,6 +71,30 @@ export class ItemRepository implements IItemRepository {
     async getCategories(): Promise<CategoryEntity[]> {
         return await CategoryEntity.findAll();
     }
+
+    public async getItemsByCategory(categoryName: string): Promise<any[]> {
+        try {
+            console.log("Nom de la catégorie transmis :", categoryName);
+    
+            const items = await ItemEntity.findAll({
+                include: {
+                    model: CategoryEntity,
+                    as: "categories",
+                    where: { name: categoryName },
+                    attributes: [],
+                },
+            });
+    
+            console.log("Articles trouvés :", items);
+            return items;
+        } catch (error) {
+            console.error("Erreur dans getItemsByCategory :", error);
+            throw new Error("Erreur lors de la récupération des articles par catégorie.");
+        }
+    }
+    
+    
+    
 
     async searchItems(search: string): Promise<any> {
         const searchParams = new URLSearchParams(search);
